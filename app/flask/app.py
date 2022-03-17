@@ -7,6 +7,7 @@ import configparser
 import pandas as pd
 
 import utils
+import phasing
 
 ### Function defs 
 
@@ -34,6 +35,9 @@ methodspermitted=['POST','GET']
 
 server = Flask(__name__)
 
+# Directory containing sequence resources
+seqdir='TODO'
+
 # Comment out for development
 #logging.basicConfig(filename = logdir + '/' + logfile, level = logging.DEBUG, format = f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
 
@@ -49,7 +53,7 @@ def merge_variants():
     print(data)
     build = data['build']
     vcfdf = pd.DataFrame.from_dict(data['vcf']) 
-    dtypes={'chr':'str','pos':'Int64','ref':'str','alt':'str'}
+    dtypes={'chr':'str','pos':'Int64','id':'str','ref':'str','alt':'str'}
     vcfdf = vcfdf.astype(dtypes)
     print(vcfdf)
     # Data checks
@@ -64,6 +68,7 @@ def merge_variants():
     vcfdf.sort_values(by=['chr','pos'],inplace=True)
     # Convert pandas dataframe to list of VCF Records
     vcf_records = utils.df_to_vcf(vcfdf)
+    print(vcf_records)
     utils.merge_phased_vars(vcf_records)
     # After varGrp
     #   Check if all have IN_GROUP key & value in INFO field
