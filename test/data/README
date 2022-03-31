@@ -1,0 +1,21 @@
+NOTE: All coordinates are relative to GRCh37
+
+Test#	Description	Result
+test 1	two alleles of single position merging w/ third SNP	Merges but one allele is omitted (no GROUP_IN value)
+test 2	incompatible VCFs	No merge
+test 3	mergeable adjacent insertion & deletion	Correct merge	
+test 4	mergeable adjacent insertions	Correct merge
+test 5	variants on different chromosomes	No merge
+test 6	deletions of various lengths starting at same position	No merge
+test 7	overlapping deletions, inconsistent descriptions	No merge	
+test 8	overlapping deletions, not anchored	No merge
+test 9	SNP + delins	Test positions are wrong, result is wrong--come back to this
+test 10	Two deletions very far away	Merges (I assume correctly)
+test 11	Variant with dot notation	Throws error
+test 12	5 variant types	Merges (I assume correctly)
+test 13	SNP with incorrect reference sequence	Merges, repeat this w/ easier test case
+test 14	Insertion overlapping another variant	Merges correctly	
+test 15	Insertion overlapping another variant	Merges correctly (identical to test 15)
+test 16	Inversion overlapping another variant, inconsistent description	No merge	
+test 17 No merge required, merged variant already present	No merge	
+test 18 No merge required, single variant in VCF	No merge

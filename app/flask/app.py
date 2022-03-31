@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect
+from flask import Flask, request
 #from flask_cors import CORS, cross_origin
 #from OpenSSL import SSL
 import logging
@@ -49,13 +49,14 @@ def test():
 ### Run VarGrouper to produce merged VCF ###
 @server.route('/merge_variants', methods=methodspermitted)
 def merge_variants():
+    print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@')
     data = request.get_json(silent=False, force=False)
-    print(data)
     build = data['build']
+    merge_distance = 99999 # TODO make this part of payload
     vcfdf = pd.DataFrame.from_dict(data['vcf']) 
     dtypes={'chr':'str','pos':'Int64','id':'str','ref':'str','alt':'str'}
     vcfdf = vcfdf.astype(dtypes)
-    print(vcfdf)
+    #print(vcfdf)
     # Data checks
     # No NULL values in df
     if vcfdf.isnull().values.any():
@@ -68,8 +69,9 @@ def merge_variants():
     vcfdf.sort_values(by=['chr','pos'],inplace=True)
     # Convert pandas dataframe to list of VCF Records
     vcf_records = utils.df_to_vcf(vcfdf)
-    print(vcf_records)
-    utils.merge_phased_vars(vcf_records)
+    #print(vcf_records)
+    mergedf = utils.merge_phased_vars(vcf_records, build, merge_distance)
+    print(mergedf)
     # After varGrp
     #   Check if all have IN_GROUP key & value in INFO field
     #   Look for VCF call that matches IN_GROUP value chr & pos & has lowercase letters
@@ -80,7 +82,11 @@ def merge_variants():
     #headers['Errors'] = datetime.now()
     #response=Response(jpg_as_text,status_code,headers)
     #return response
-    return 'MERGE'
+    err = ''
+    resjson = utils.package_df(mergedf, err)
+    print(resjson)
+    rescode = 200
+    return resjson, rescode, {'ContentType':'application/json'}
 
 ##############################################
 
