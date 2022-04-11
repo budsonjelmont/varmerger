@@ -5,7 +5,7 @@ indir=/mnt/c/Users/judson.x.belmont/Documents/Code/varchemist/test/data/
 outdir=/mnt/c/Users/judson.x.belmont/Documents/Code/varchemist/test/data/
 genomicbuild=grch37 # Case-sensitive. Need to add aliases for 'GRCh37' support
 indents=4
-ntests=18
+ntests=28
 
 declare -A TEST # 1st dimension array. One per dataset.
 declare -A TESTS # 2nd dimension array. Each key is of format [integer_id_of_1st_d_array],[array_key_from_ast_d_array]

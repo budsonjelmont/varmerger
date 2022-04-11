@@ -26,7 +26,8 @@ def df_to_vcf(df):
     df['format'] = None
   elif (df['format'] == '.').any():
     print('ERROR: Inconsistent entries in \'FORMAT\' field.')
-  #print(df)
+  # Rewrite '.' in ALT field
+  df['alt'] = df['alt'].replace({'.':None}).fillna(df['ref'])
   return df.apply(lambda x: vcf.model._Record(x['chr'], x['pos'], x['id'], x['ref'], [vcfreader._parse_alt(x['alt'])], x['qual'], x['filter'], vcfreader._parse_info(x['info']), None, sample_indexes=None, samples=None), axis=1).values.tolist()
 
 def vcf_to_df(vcf):
