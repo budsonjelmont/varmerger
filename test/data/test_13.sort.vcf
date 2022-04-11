@@ -97,5 +97,5 @@
 ##bcftools_viewCommand=view; Date=Fri Feb  4 19:31:59 2022
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
 7	24361292	Test13_1	T	G	.	.	.
-7	24361410	Test13_2	C	T	.	.	.
-7	24362162	Test13_incorrectREF	G	T	.	.	.
+7	24361294	Test13_2	A	G	.	.	.
+7	24361295	Test13_incorrectREF	T	G	.	.	.
