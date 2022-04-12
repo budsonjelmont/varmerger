@@ -63,9 +63,10 @@ class TestPhasing:
     jsonfile='test_A006.json'
     in_json = self.get_test_payload(jsonfile)
     res = requests.post(self.url, json=in_json, headers=self.headers)
-    vcf = self.get_vcf(res.json())
+    vcf = self.get_vcf(res.json())[0]
     print(vcf)
-    assert not vcf
+    assert vcf['ref'] == 'TAAGGCTTAATATTGGTAGAGAGAGAAAG'
+    assert vcf['alt'] == 'T'
   
   def test_A007(self):
     jsonfile='test_A007.json'
@@ -73,32 +74,35 @@ class TestPhasing:
     res = requests.post(self.url, json=in_json, headers=self.headers)
     vcf = self.get_vcf(res.json())[0]
     print(vcf)
-    assert vcf['ref']=='TAAGGCTTAATATTGGTA'
-    assert vcf['alt']=='T'
+    assert vcf['ref'] == 'TAAGGCTTAATATTGGTA'
+    assert vcf['alt'] == 'T'
   
   def test_A008(self):
     jsonfile='test_A008.json'
     in_json = self.get_test_payload(jsonfile)
     res = requests.post(self.url, json=in_json, headers=self.headers)
-    vcf = self.get_vcf(res.json())
+    vcf = self.get_vcf(res.json())[0]
     print(vcf)
-    assert not vcf
+    assert vcf['ref'] == 'TAAGGCTTAATATT'
+    assert vcf['alt'] == 'T'
   
   def test_A009(self):
     jsonfile='test_A009.json'
     in_json = self.get_test_payload(jsonfile)
     res = requests.post(self.url, json=in_json, headers=self.headers)
-    vcf = self.get_vcf(res.json())
+    vcf = self.get_vcf(res.json())[0]
     print(vcf)
-    assert not vcf
+    assert vcf['ref'] == 'TAAGGCTTAATATTGGTA' 
+    assert vcf['alt'] == 'CCGTA'
   
   def test_A010(self):
     jsonfile='test_A010.json'
     in_json = self.get_test_payload(jsonfile)
     res = requests.post(self.url, json=in_json, headers=self.headers)
-    vcf = self.get_vcf(res.json())
+    vcf = self.get_vcf(res.json())[0]
     print(vcf)
-    assert not vcf
+    assert vcf['ref'] == 'ATAAACCCTATGCTCTCAGTTCAACACTCTTCAGATGATGTAGCCATTTAACTGTCCTACACAAAATGCTTGTAAAAATCTACTAGATTCAAAAACATTTCACTGGACACCAAATAGTGATAGCCATGTTTGAATCTCAG'
+    assert vcf['alt'] == 'ACCCTATGCTCTCAGTTCAACACTCTTCAGATGATGTAGCCATTTAACTGTCCTACACAAAATGCTTGTAAAAATCTACTAGATTCAAAAACATTTCACTGGACACCAAATAGTGATAGCCATGTTTGAATCTCACCCCCCG'
   
   def test_A011(self):
     jsonfile='test_A011.json'
@@ -107,8 +111,8 @@ class TestPhasing:
     out_json = res.json()
     vcf = out_json['result'][0]
     print(vcf)
-    assert vcf['ref']=='GT' #TODO 2xcheck
-    assert vcf['alt']=='AT'
+    assert vcf['ref'] == 'GT' #TODO 2xcheck
+    assert vcf['alt'] == 'AT'
   
   def test_A012(self):
     jsonfile='test_A012.json'
@@ -117,8 +121,8 @@ class TestPhasing:
     out_json = res.json()
     vcf = out_json['result'][0]
     print(vcf)
-    assert vcf['ref']=='AGAGAAATACCCTGGACC'
-    assert vcf['alt']=='AATATTAATTTTTCCCATTC'
+    assert vcf['ref'] == 'AGAGAAATACCCTGGACC'
+    assert vcf['alt'] == 'AATATTAATTTTTCCCATTC'
   
   def test_A013(self):
     jsonfile='test_A013.json'
@@ -265,4 +269,4 @@ class TestPhasing:
 
 if __name__ == '__main__':
     test = TestPhasing()
-    test.test_A013()
+    test.test_A010()
