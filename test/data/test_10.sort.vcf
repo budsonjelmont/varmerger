@@ -96,6 +96,5 @@
 ##bcftools_viewVersion=1.14-8-gdc009e5+htslib-1.14-7-g1d79f44
 ##bcftools_viewCommand=view; Date=Fri Feb  4 19:31:59 2022
 #CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
-5	38338800	Test10_1	GTC	GT	.	.	.
-5	38409106	Test10_2	GCG	GC	.	.	.
-5	38445804	Test10_3	AG	A	.	.	.
+6	66666666	Test10_1	ATAAA	A	.	.	.
+6	66666804	Test10_2	AG	ACCCCCCG	.	.	.
