@@ -53,7 +53,7 @@ def merge_variants():
     data = request.get_json(silent=False, force=False)
     build = data['build']
     merge_distance = 99999 # TODO make this part of payload
-    vcfdf = pd.DataFrame.from_dict(data['vcf']) 
+    vcfdf = pd.DataFrame.from_dict(data['vcf'])
     dtypes={'chr':'str','pos':'Int64','id':'str','ref':'str','alt':'str'}
     vcfdf = vcfdf.astype(dtypes)
     #print(vcfdf)
@@ -72,16 +72,10 @@ def merge_variants():
     #print(vcf_records)
     mergedf = utils.merge_phased_vars(vcf_records, build, merge_distance)
     print(mergedf)
-    # After varGrp
-    #   Check if all have IN_GROUP key & value in INFO field
-    #   Look for VCF call that matches IN_GROUP value chr & pos & has lowercase letters
-    #       # Consider modifying varGrouper to populate GROUP_ID tag & use this to find merged VCF instead 
-    #status_code=200
-    #headers={}
-    #headers['Content-Type']='application/json'
-    #headers['Errors'] = datetime.now()
-    #response=Response(jpg_as_text,status_code,headers)
-    #return response
+    # Add warning for merges in which 1 or more variants were skipped
+    mergedf['warn'] = mergedf['skipped'].apply(lambda x: 'These variants in the phase group could not be merged and were omitted: ' + ';'.join(x) if x  else None)
+    # Drop columns that won't be returned to client
+    mergedf.drop(columns=['skipped'], inplace=True, axis=1)
     err = ''
     resjson = utils.package_df(mergedf, err)
     print(resjson)

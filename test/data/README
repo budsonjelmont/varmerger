@@ -17,7 +17,7 @@ test 13	SNP with incorrect reference sequence	Merges, incorrect REF ignored
 test 14	Insertion overlapping another variant	Merges correctly	
 test 15	Insertion overlapping another variant	Merges correctly (identical to test 15)
 test 16	Inversion overlapping another variant, inconsistent description	No merge	
-test 17 No merge required, merged variant already present	No merge	
+test 17 2 SNPs + redundant delins	Delins skipped	
 test 18 No merge required, single variant in VCF	No merge
 test 19 Del + SNPs + Inv	Merge (normalized deletions)
 test 20 Del + SNPs + Inv	Merge (non-normalized deletions) 
