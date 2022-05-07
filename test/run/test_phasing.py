@@ -33,9 +33,11 @@ class TestPhasing:
     res = requests.post(self.url, json=in_json, headers=self.headers)
     print(res.text)
     vcf = self.get_vcf(res.json())[0]
-    assert vcf['ref'] == 'CTGC'
-    assert vcf['alt'] == 'CGC'
-  
+    #assert vcf['ref'] == 'CTGC'
+    #assert vcf['alt'] == 'CGC'
+    assert vcf['ref'] == 'CTGC' # This is the result obtained after L-trimming VCF
+    assert vcf['alt'] == 'CCT' # This is the result obtained after L-trimming VCF
+
   def test_A003(self):
     jsonfile='test_A003.json'
     in_json = self.get_test_payload(jsonfile)
@@ -92,8 +94,10 @@ class TestPhasing:
     res = requests.post(self.url, json=in_json, headers=self.headers)
     vcf = self.get_vcf(res.json())[0]
     print(vcf)
-    assert vcf['ref'] == 'TAAGGCTTAATATTGGTA' 
-    assert vcf['alt'] == 'CCGTA'
+    #assert vcf['ref'] == 'TAAGGCTTAATATTGGTA' 
+    #assert vcf['alt'] == 'CCGTA'
+    assert vcf['ref'] == 'TAAGGCTTAATATTG' # After R-trimming 
+    assert vcf['alt'] == 'CC' # After R-trimming
   
   def test_A010(self):
     jsonfile='test_A010.json'
@@ -101,8 +105,8 @@ class TestPhasing:
     res = requests.post(self.url, json=in_json, headers=self.headers)
     vcf = self.get_vcf(res.json())[0]
     print(vcf)
-    assert vcf['ref'] == 'ATAAACCCTATGCTCTCAGTTCAACACTCTTCAGATGATGTAGCCATTTAACTGTCCTACACAAAATGCTTGTAAAAATCTACTAGATTCAAAAACATTTCACTGGACACCAAATAGTGATAGCCATGTTTGAATCTCAG'
-    assert vcf['alt'] == 'ACCCTATGCTCTCAGTTCAACACTCTTCAGATGATGTAGCCATTTAACTGTCCTACACAAAATGCTTGTAAAAATCTACTAGATTCAAAAACATTTCACTGGACACCAAATAGTGATAGCCATGTTTGAATCTCACCCCCCG'
+    assert vcf['ref'] == 'ATAAACCCTATGCTCTCAGTTCAACACTCTTCAGATGATGTAGCCATTTAACTGTCCTACACAAAATGCTTGTAAAAATCTACTAGATTCAAAAACATTTCACTGG'
+    assert vcf['alt'] == 'ACCCTATGCTCTCAGTTCAACACTCTTCAGATGATGTAGCCATTTAACTGTCCTACACAAAATGCTTGTAAAAATCTACTAGATTCAAAAACATTTCACTGGTTTT'
   
   def test_A011(self):
     jsonfile='test_A011.json'
@@ -111,8 +115,8 @@ class TestPhasing:
     out_json = res.json()
     vcf = out_json['result'][0]
     print(vcf)
-    assert vcf['ref'] == 'GT' #TODO 2xcheck
-    assert vcf['alt'] == 'AT'
+    assert vcf['ref'] == 'GT'
+    assert vcf['alt'] == 'GG'
   
   def test_A012(self):
     jsonfile='test_A012.json'
@@ -121,8 +125,11 @@ class TestPhasing:
     out_json = res.json()
     vcf = out_json['result'][0]
     print(vcf)
-    assert vcf['ref'] == 'AGAGAAATACCCTGGACC'
-    assert vcf['alt'] == 'AATATTAATTTTTCCCATTC'
+    #assert vcf['ref'] == 'AGAGAAATACCCTGGACC'
+    #assert vcf['alt'] == 'AATATTAATTTTTCCCATTC'
+    # After L&R trimming
+    assert vcf['ref'] == 'AGAGAAATACCCTGGAC'
+    assert vcf['alt'] == 'AATATTAATTTTTCCCATT'
   
   def test_A013(self):
     jsonfile='test_A013.json'
@@ -164,8 +171,10 @@ class TestPhasing:
     vcf = out_json['result'][0]
     print(vcf)
     assert vcf['chr'] == '16'
-    assert vcf['ref'] == 'TTCCT'
-    assert vcf['alt'] == 'CTTCT'
+    #assert vcf['ref'] == 'TTCCT'
+    #assert vcf['alt'] == 'CTTCT'
+    assert vcf['ref'] == 'TTC' # This is the result obtained after L/R-trimming VCF
+    assert vcf['alt'] == 'CTT' # This is the result obtained after L/R-trimming VCF
   
   def test_A017(self):
     jsonfile='test_A017.json'
@@ -210,8 +219,11 @@ class TestPhasing:
     res = requests.post(self.url, json=in_json, headers=self.headers)
     vcf = self.get_vcf(res.json())[0]
     print(vcf)
+    #assert vcf['ref'] == 'GTGTTCCCA'
+    #assert vcf['alt'] == 'GGGTAAACCAC'
+    # After L&R trimming
     assert vcf['ref'] == 'GTGTTCCCA'
-    assert vcf['alt'] == 'GGGTAAACCAC'# One variant skipped
+    assert vcf['alt'] == 'GGGTAAAGCAC'
   
   def test_A022(self):
     jsonfile='test_A022.json'
@@ -255,8 +267,11 @@ class TestPhasing:
     res = requests.post(self.url, json=in_json, headers=self.headers)
     vcf = self.get_vcf(res.json())[0]
     print(vcf)
-    assert vcf['ref'] == 'GTGTTCCCA'
-    assert vcf['alt'] == 'GGGGTGCAC'
+    #assert vcf['ref'] == 'GTGTTCCCA'
+    #assert vcf['alt'] == 'GGGGTGCAC'
+    # After L&R trimming
+    assert vcf['ref'] == 'TGTTCCCA'
+    assert vcf['alt'] == 'GGGTGCAC'
   
   def test_A027(self):
     jsonfile='test_A027.json'
@@ -264,8 +279,11 @@ class TestPhasing:
     res = requests.post(self.url, json=in_json, headers=self.headers)
     vcf = self.get_vcf(res.json())[0]
     print(vcf)
-    assert vcf['ref'] == 'AATCA'
-    assert vcf['alt'] == 'ACGT'
+    #assert vcf['ref'] == 'AATCA'
+    #assert vcf['alt'] == 'ACGT'
+    assert vcf['ref'] == 'ATCA'
+    assert vcf['alt'] == 'CGT'
+
 
   def test_A028(self):
     jsonfile='test_A028.json'
@@ -273,8 +291,10 @@ class TestPhasing:
     res = requests.post(self.url, json=in_json, headers=self.headers)
     vcf = self.get_vcf(res.json())[0]
     print(vcf)
-    assert vcf['ref'] == 'AATCAT'
-    assert vcf['alt'] == 'ACGT'
+    #assert vcf['ref'] == 'AATCAT'
+    #assert vcf['alt'] == 'ACGT'
+    assert vcf['ref'] == 'ATCA'
+    assert vcf['alt'] == 'CGT'
   
   def test_A029(self):
     jsonfile='test_A029.json'
@@ -282,17 +302,22 @@ class TestPhasing:
     res = requests.post(self.url, json=in_json, headers=self.headers)
     vcf = self.get_vcf(res.json())[0]
     print(vcf)
-    assert vcf['ref'] == 'GTGTTCCCA'
-    assert vcf['alt'] == 'GTGTTCCCA'
+    #assert vcf['ref'] == 'GTGTTCCCA'
+    #assert vcf['alt'] == 'GTGTTCCCA'
+    assert vcf['ref'] == 'TGTTCCC'
+    assert vcf['alt'] == 'CTGT'
 
   def test_A030(self):
     jsonfile='test_A030.json'
     in_json = self.get_test_payload(jsonfile)
     res = requests.post(self.url, json=in_json, headers=self.headers)
     vcf = self.get_vcf(res.json())[0]
+    vcf1 = self.get_vcf(res.json())[1]
     print(vcf)
-    assert vcf['ref'] == 'GTGTTCCCA'
-    assert vcf['alt'] == 'GTGTTCCCA'
+    assert vcf['ref'] == 'CTG'
+    assert vcf['alt'] == 'CGCA'
+    assert vcf1['ref'] == 'AG'
+    assert vcf1['alt'] == 'GC'
 
 if __name__ == '__main__':
     test = TestPhasing()
