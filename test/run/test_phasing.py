@@ -318,7 +318,15 @@ class TestPhasing:
     assert vcf['alt'] == 'CGCA'
     assert vcf1['ref'] == 'AG'
     assert vcf1['alt'] == 'GC'
+  
+  def test_B001(self):
+    in_dict = {'vcf':[]}
+    in_json = json.dumps(in_dict)
+    res = requests.post(self.url, json=in_json, headers=self.headers)
+    print(res.text)
+    print(res.headers)
+    assert res.status_code == 400
 
 if __name__ == '__main__':
     test = TestPhasing()
-    test.test_A030()
+    test.test_B001()

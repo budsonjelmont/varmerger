@@ -7,6 +7,7 @@ parser.add_argument('vcfinfile', type=str, nargs=1, help='VCF input file')
 parser.add_argument('jsonoutfile', type=str, nargs=1, help='JSON output file')
 parser.add_argument('--g','--build', type=str, dest='genomicbuild', default='GRCh37', help='Genomic build to include in JSON payload. Default: GRCh37')
 parser.add_argument('--i','--indents', type=int, dest='indents', default=4, help='Indents to add to make JSON output look nice. Default: 4')
+parser.add_argument('--m','--mergedist', type=int, dest='mergedist', help='Optional. Merge distance to include in payload for phase merges.')
 
 #args = parser.parse_args('/mnt/c/Users/judson.x.belmont/Documents/Code/varchemist/test/data/test_8.sort.vcf /mnt/c/Users/judson.x.belmont/Documents/Code/varchemist/test/data/test_A008.json'.split(' '))
 args = parser.parse_args()
@@ -15,6 +16,7 @@ vcfinfile = args.vcfinfile[0]
 jsonoutfile = args.jsonoutfile[0]
 genomicbuild = args.genomicbuild
 indents = args.indents
+mergedist = args.mergedist
 
 with open(vcfinfile, 'r') as vcffile:
   reader = vcf.Reader(vcffile)
@@ -32,5 +34,9 @@ with open(vcfinfile, 'r') as vcffile:
       vcflist.append({"chr": record.CHROM, "pos": record.POS, "id": record.ID, "ref": record.REF, "alt": str(alt)})
 
 jsondict = {'build':genomicbuild, 'vcf': vcflist}
+
+if mergedist is not None:
+    jsondict['mergedist'] = mergedist
+
 with open(jsonoutfile, 'w') as jsonfile:
-  json.dump(jsondict, jsonfile, indent=4)
+  json.dump(jsondict, jsonfile, indent=indents)

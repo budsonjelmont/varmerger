@@ -1,5 +1,5 @@
-from app import server
+from app import app
 
 if __name__ == "__main__":
     # Will run the app using flask's development server 
-    server.run(host='0.0.0.0', port=6666)
+    app.run(host='0.0.0.0', port=6666)
