@@ -1,32 +1,40 @@
+import argparse as ap
+
 from flask import Flask, request
 #from flask_cors import CORS, cross_origin
 #from OpenSSL import SSL
-import configparser
+
+from yaml import safe_load
 
 import pandas as pd
 
-import utils
-import phasing
+from services.utils import utils
+from services.phasing import phasing
 
 import logging
 from logging.config import dictConfig
 
 from werkzeug.exceptions import BadRequest, BadRequestKeyError
 
-### Function defs 
+### Function defs # TODO move to another module 
 
-def parse_config(configfile):
-  config = configparser.ConfigParser()
-  try:
-    with open(configfile) as f:
-      config.read_file(f)
-  except IOError:
-    print('ERROR: Could not read config file ' + configfile)
-    quit()
-  originspermitted = config['ORIGINSPERMITTED']
-  methodspermitted = config['METHODSPERMITTED']
-  logdir = config['LOGDIR']
-  return dirconfig, appconfig, logconfig
+def setup_logging(configfile):
+  if configfile is None:
+    logging.basicConfig(
+      level=logging.DEBUG,
+      format='%(asctime)s %(message)s',
+      handlers=[logging.StreamHandler()]
+    )
+  else:
+    try:
+      with open(configfile) as f:
+        logconfig = safe_load(f)
+        print(logconfig)
+        logging.config.dictConfig(logconfig)
+    except IOError:
+      print('ERROR: Could not read config file ' + configfile)
+      quit()
+    logging.config.dictConfig(logconfig)
 
 def check_phasing_payload(payload):
     reqdkeys = ['build','vcf']
@@ -40,55 +48,16 @@ def check_phasing_payload(payload):
           raise BadRequest('Invalid request.')
 
 def check_prephasing_vcf(vcfdf):
-  # Check for NULL values in df, and that all variants are on the same chromosome
-  if vcfdf.isnull().values.any() or len(vcfdf.chr.unique()) > 1:
+  # Check for NULL values in df, that all variants are on the same chromosome, and that more than one variant was passed in
+  if vcfdf.isnull().values.any() or len(vcfdf.chr.unique()) > 1 or vcfdf.shape[0] == 1:
     raise BadRequest('Invalid request.')
 
 # Initialize Flask properties from config file
-#....
-
-logdir='/tmp'
-logfile='flask.log'
 
 originspermitted=['localhost:80','127.0.0.1:80','0.0.0.0:80','localhost:6666','127.0.0.1:6666','0.0.0.0:6666']
 methodspermitted=['POST','GET']
 
 app = Flask(__name__)
-
-logging.config.dictConfig({
-    'version': 1,
-    'formatters': {'default': {
-        'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s',
-    }},
-    'handlers': {
-        'wsgi': {
-          'level': 'DEBUG',
-          'class': 'logging.StreamHandler',
-          'stream': 'ext://sys.stdout',
-          'formatter': 'default' 
-         },
-         'console': {
-            'level': 'INFO',
-            'class': 'logging.StreamHandler',
-            'formatter': 'default',
-            'stream': 'ext://sys.stdout',
-        }
-        ,
-        'file': {
-          'level': 'DEBUG',
-          'class': 'logging.FileHandler',
-          'filename': '/home/belmjud/varchemist.log',
-          'formatter': 'default'
-         }
-    },
-    'root': {
-        'level': 'INFO',
-        'handlers': ['wsgi','console','file']
-    }
-})
-
-# Comment out for development
-#logging.basicConfig(filename = logdir + '/' + logfile, level = logging.DEBUG, format = f'[%(asctime)s] %(levelname)s %(name)s %(threadName)s : %(message)s')
 
 ### Error handling ###
 @app.errorhandler(BadRequest)
@@ -129,7 +98,7 @@ def merge_variants():
     # Convert pandas dataframe to list of VCF Records
     vcf_records = utils.df_to_vcf(vcfdf)
     #print(vcf_records)
-    mergedf = utils.merge_phased_vars(vcf_records, build, merge_distance)
+    mergedf = phasing.merge_phased_vars(vcf_records, build, merge_distance)
     #print(mergedf)
     # Add warning for merges in which 1 or more variants were skipped
     mergedf['warn'] = mergedf['skipped'].apply(lambda x: 'These variants in the phase group could not be merged and were omitted: ' + ';'.join(x) if x  else None)
@@ -147,5 +116,14 @@ def merge_variants():
 
 #context=(cer,key)
 if __name__ == '__main__':
+  
+  parser = ap.ArgumentParser(description='')
+  parser.add_argument('logconfigfile',type=str,nargs='?',help='YAML file containing the logging configuration parameters.')
+
+  args = parser.parse_args()
+
+  logconfigfile = args.logconfigfile
+  
+  setup_logging(logconfigfile)
   app.run(host='0.0.0.0')
   #app.run(host='0.0.0.0',ssl_context=context)
