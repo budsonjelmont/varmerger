@@ -1,7 +1,5 @@
 import numpy as np
 import pandas as pd
-from celltics.tools import vargroup, datasource
-#import celltics
 import vcf
 from vcf import utils
 
@@ -59,10 +57,6 @@ def df_to_vcf(df, l_trim=True, r_trim=True):
     # TODO REF & ALT trimming below works, but vectorized doesn't
     df['ref'] = df.apply(lambda x: x['ref'][len(x['ref']) - len(x[ref_tmp_col]):], axis=1)
     df['alt'] = df.apply(lambda x: x['alt'][len(x['alt']) - len(x[alt_tmp_col]):], axis=1)
-    print(df['ref'].str.len())
-    print(df[ref_tmp_col].str.len())
-    #print(df['ref'].str.len() - df[ref_tmp_col].str.len())
-    print(df['ref'].str.slice(df['ref'].str.len() - df[ref_tmp_col].str.len(),))
     #df['ref'] = df['ref'].str[(df['ref'].str.len() - df[ref_tmp_col].str.len()):]
     #df['alt'] = df['alt'].str[(df['alt'].str.len() - df[alt_tmp_col].str.len()):]
     # Re-sort dataframe
@@ -75,18 +69,6 @@ def vcf_to_df(vcf):
     df = pd.DataFrame([{'chr': var.CHROM, 'pos': var.POS, 'id': var.ID, 'ref': var.REF, 'alt': ','.join([str(alt) for alt in var.ALT]), 'qual': var.QUAL, 'filter': var.FILTER, 'info': None, 'format': var.FORMAT} for var in vcf])
     #print(df)
     return df
-
-def merge_phased_vars(vcf, build, merge_distance=500):
-  # TODO payload check
-  vars_skipped, vars_to_group = vargroup.parse_vcf(vcf, merge_distance, None)
-  print('vars_skipped:') # if any, need to error out here
-  print([vargroup.get_id(v) for v in vars_skipped])
-  n_candidates = len(vars_to_group) # For logging
-  sr = datasource.SeqRepo('http://127.0.0.1:7777', build)
-  records, var_dict, skipped = vargroup.bam_and_merge_multiprocess(None, vars_to_group, fq_threshold=0, min_reads=99999, bam_filter_mode='pagb', ref_seq=None, nthreads=1, debug=False, datasource=sr)
-  df = vcf_to_df(records)
-  df['skipped'] = skipped
-  return df
 
 def package_df(df, err):
     payload = {'result': df.to_dict(orient='records'), 'err': err}
