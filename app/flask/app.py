@@ -8,15 +8,15 @@ from yaml import safe_load
 
 import pandas as pd
 
-from services.utils import utils
-from services.phasing import phasing
+from varchemist import utils
+from varchemist import phasing
 
 import logging
 from logging.config import dictConfig
 
 from werkzeug.exceptions import BadRequest, BadRequestKeyError
 
-### Function defs # TODO move to another module 
+### Function defs ### TODO move to another module 
 
 def setup_logging(configfile):
   if configfile is None:

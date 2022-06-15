@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from celltics.tools import vargroup, datasource
+from varchemist import utils
 
 def merge_phased_vars(vcf, build, merge_distance=500):
   # TODO payload check
@@ -10,7 +11,7 @@ def merge_phased_vars(vcf, build, merge_distance=500):
   n_candidates = len(vars_to_group) # For logging
   sr = datasource.SeqRepo('http://127.0.0.1:7777', build)
   records, var_dict, skipped = vargroup.bam_and_merge_multiprocess(None, vars_to_group, fq_threshold=0, min_reads=99999, bam_filter_mode='pagb', ref_seq=None, nthreads=1, debug=False, datasource=sr)
-  df = vcf_to_df(records)
+  df = utils.vcf_to_df(records)
   df['skipped'] = skipped
   return df
 
