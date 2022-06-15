@@ -2,7 +2,7 @@ NOTE: All coordinates are relative to GRCh37
 
 Test#	Description	Result
 test 1	two alleles of single position merging w/ third SNP	Merges but one allele is omitted (no GROUP_IN value)
-test 2	incompatible VCFs	No merge
+test 2	incompatible VCFs, but will merge after L trimming 
 test 3	mergeable adjacent insertion & deletion	Correct merge	
 test 4	mergeable adjacent insertions	Correct merge
 test 5	variants on different chromosomes	No merge
@@ -11,7 +11,7 @@ test 7	overlapping deletions, inconsistent descriptions	No merge, only first var
 test 8	overlapping deletions, not anchored	No merge
 test 9	SNP + delins	Test positions are wrong, result is wrong--come back to this
 test 10	Two deletions very far away	Merges (I assume correctly)
-test 11	Variant with dot notation	Merges, . replaced with REF allele before VCF conversion	make_test_jsons writes incorrect payload, need to manually correct	
+test 11	Variant with dot notation. First variant has incorrect REF allele	Merges, . replaced with REF allele before VCF conversion	make_test_jsons writes incorrect payload, need to manually correct	
 test 12	6 variant types	Merges, one variant skipped
 test 13	SNP with incorrect reference sequence	Merges, incorrect REF ignored
 test 14	Insertion overlapping another variant	Merges correctly	
@@ -21,16 +21,17 @@ test 17 2 SNPs + redundant delins	Delins skipped
 test 18 No merge required, single variant in VCF	No merge
 test 19 Del + SNPs + Inv	Merge (normalized deletions)
 test 20 Del + SNPs + Inv	Merge (non-normalized deletions) 
-test 21 Del + SNPs + Inv	Merge (SNP2 skipped w/ warning b/c it conflicts w/ previous entry) 
+test 21 Del + SNPs + Inv	Merge (SNP2 skipped w/ warning b/c it conflicts w/ previous entry, different SNP variant skipped after L&R trimming)
 test 22 Del + SNPs + Inv	Merge (Same as 21 but SNP2 not skipped b/c previous entry is normalized) 
 test 23 Del + DelIns + SNPs + Inv	Merge (DELINS1 skipped w/ warning) 
 test 24 SNPs + Del	SNP occurs after 3bp Deletion	PASS
-test 25 Del + SNPs + Inv	Merge (same as 19 but first deletion is not normalized--incorrect merge) FAIL
+test 25 Del + SNPs + Inv	Merge (same as 19 but first deletion is not right trimmed) FAIL
 test 26 3SNPs + Inv	First SNP NOT normalized	PASS	
 test 27 Delins + SNP	SNP overlapping delins that is consistent	Second variant skipped
 test 28 2 overlapping Delins	Overlapping delins that are consistent Second variant skipped	
-
-
+test 29 Merge SNP with non-L-trimmed Deletion	SNP skipped, will work if L trimming implemented
+test 30 Two merges on separate chromosomes
+ 
 TODO repeat 7 but with another variant further downstream
 BioStars example:
 1   13459   rs1315857414    CAGA    C

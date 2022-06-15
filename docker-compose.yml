@@ -1,10 +1,12 @@
-version: '3'
+version: '1.0.0'
 
 services:
   flask:
     container_name: varchemist_flask
     restart: always
-    build: ./flask
+    build: 
+        context: .
+        dockerfile: ./app/flask/Dockerfile
     ports:
       - "6666:6666"
     command: gunicorn -w 1 -b 0.0.0.0:6666 wsgi:server
@@ -12,7 +14,9 @@ services:
   nginx:
     container_name: varchemist_nginx
     restart: always
-    build: ./nginx
+    build:
+        context: .
+        dockerfile: ./app/nginx/Dockerfile
     ports:
       - "80:80"
     depends_on:

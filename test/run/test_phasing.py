@@ -6,6 +6,8 @@ import requests
 class TestPhasing:
   testdir = '../data/'
   baseurl = 'http://127.0.0.1:6666'
+  #baseurl = 'http://127.0.0.1:5000'
+  #baseurl = 'http://127.0.0.1:80'
   endpoint = '/merge_variants'
   url = baseurl + endpoint
   headers = {'Content-type': 'application/json'} # don't strictly need to set explicitly, requests lib will do it for us
@@ -329,4 +331,4 @@ class TestPhasing:
 
 if __name__ == '__main__':
     test = TestPhasing()
-    test.test_B001()
+    test.test_A015()
