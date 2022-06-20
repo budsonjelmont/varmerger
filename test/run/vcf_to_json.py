@@ -14,7 +14,7 @@ args = parser.parse_args()
 
 vcfinfile = args.vcfinfile[0]
 jsonoutfile = args.jsonoutfile[0]
-genomicbuild = args.genomicbuild
+genomicbuild = args.genomicbuild # Deprecated. No longer sent in JSON payload.
 indents = args.indents
 mergedist = args.mergedist
 
@@ -33,7 +33,7 @@ with open(vcfinfile, 'r') as vcffile:
       # TODO add support for other VCF fields
       vcflist.append({"chr": record.CHROM, "pos": record.POS, "id": record.ID, "ref": record.REF, "alt": str(alt)})
 
-jsondict = {'build':genomicbuild, 'vcf': vcflist}
+jsondict = {'vcf': vcflist}
 
 if mergedist is not None:
     jsondict['mergedist'] = mergedist

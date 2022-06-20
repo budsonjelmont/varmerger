@@ -5,10 +5,9 @@ import requests
 #@pytest.mark.phasing # see https://circleci.com/blog/testing-flask-framework-with-pytest/
 class TestPhasing:
   testdir = '../data/'
-  baseurl = 'http://127.0.0.1:6666'
-  #baseurl = 'http://127.0.0.1:5000'
-  #baseurl = 'http://127.0.0.1:80'
-  endpoint = '/merge_variants'
+  #baseurl = 'http://127.0.0.1:6666'
+  baseurl = 'http://127.0.0.1:5000'
+  endpoint = '/phase/grch37/merge_variants'
   url = baseurl + endpoint
   headers = {'Content-type': 'application/json'} # don't strictly need to set explicitly, requests lib will do it for us
 
@@ -321,6 +320,19 @@ class TestPhasing:
     assert vcf1['ref'] == 'AG'
     assert vcf1['alt'] == 'GC'
   
+  def test_A031(self):
+    jsonfile='test_A031.json'
+    in_json = self.get_test_payload(jsonfile)
+    res = requests.post(self.url, json=in_json, headers=self.headers)
+    assert res.status_code == 400
+  
+  def test_A032(self):
+    jsonfile='test_A032.json'
+    in_json = self.get_test_payload(jsonfile)
+    res = requests.post(self.url, json=in_json, headers=self.headers)
+    assert res.status_code == 400
+    
+    
   def test_B001(self):
     in_dict = {'vcf':[]}
     in_json = json.dumps(in_dict)
@@ -331,4 +343,4 @@ class TestPhasing:
 
 if __name__ == '__main__':
     test = TestPhasing()
-    test.test_A015()
+    test.test_A001()
