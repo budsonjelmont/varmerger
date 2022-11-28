@@ -2,17 +2,20 @@ version: '1.0.0'
 
 services:
   flask:
-    container_name: varchemist_flask
+    container_name: varmerger_flask
     restart: always
     build: 
         context: .
         dockerfile: ./app/flask/Dockerfile
+        args:
+                progress: string
     ports:
       - "6666:6666"
-    command: gunicorn -w 1 -b 0.0.0.0:6666 wsgi:server
+    command: "tail -f /dev/null"
+    #command: gunicorn -w 1 -b 0.0.0.0:6666 wsgi:server
   
   nginx:
-    container_name: varchemist_nginx
+    container_name: varmerger_nginx
     restart: always
     build:
         context: .
@@ -20,4 +23,4 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - varchemist_flask
+      - varmerger_flask

@@ -9,7 +9,7 @@ parser.add_argument('--g','--build', type=str, dest='genomicbuild', default='GRC
 parser.add_argument('--i','--indents', type=int, dest='indents', default=4, help='Indents to add to make JSON output look nice. Default: 4')
 parser.add_argument('--m','--mergedist', type=int, dest='mergedist', help='Optional. Merge distance to include in payload for phase merges.')
 
-#args = parser.parse_args('/mnt/c/Users/judson.x.belmont/Documents/Code/varchemist/test/data/test_8.sort.vcf /mnt/c/Users/judson.x.belmont/Documents/Code/varchemist/test/data/test_A008.json'.split(' '))
+#args = parser.parse_args('/mnt/c/Users/judson.x.belmont/Documents/Code/varmerger/test/data/test_8.sort.vcf /mnt/c/Users/judson.x.belmont/Documents/Code/varmerger/test/data/test_A008.json'.split(' '))
 args = parser.parse_args()
 
 vcfinfile = args.vcfinfile[0]

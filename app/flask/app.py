@@ -8,8 +8,8 @@ from yaml import safe_load
 
 import pandas as pd
 
-from varchemist import utils
-from varchemist import phasing
+from varmerger import utils
+from varmerger import phasing
 
 import logging
 from logging.config import dictConfig
@@ -88,8 +88,8 @@ def test():
     return 'I\'m listening.'
 
 ### Run VarGrouper to produce merged VCF ###
-@app.route('/phase/<string:build>/merge_variants', methods=methodspermitted)
-def merge_variants(build):
+@app.route('/phase/<string:build>/merge_vcf', methods=methodspermitted)
+def merge_vcf(build):
     if build.lower() in phasors.keys():
       phasor = phasors[build.lower()]
     else:
