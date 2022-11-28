@@ -1,13 +1,13 @@
 import setuptools
 
 setuptools.setup(
-    name='varchemist',
+    name='varmerger',
     version='1.0.0',
-    url='https://git01.ops.medplus.com/Judson.X.Belmont/varchemist',
+    url='https://git01.ops.medplus.com/Judson.X.Belmont/varmerger',
     author='Judson Belmont',
     author_email='judson.x.belmont@questdiagnostics.com',
     description='Variant manipulation utilities',
-    long_description=open('varchemist/README.md').read(),
+    long_description=open('varmerger/README.md').read(),
     packages=setuptools.find_packages(),
     include_package_data=True,
     install_requires=['pandas','numpy','pyvcf'],

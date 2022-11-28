@@ -3,11 +3,11 @@ FROM python:3.8.5
 
 ARG APP_PATH_EXT=/app/flask
 ARG APP_PATH_INT=/usr/src/flask
-ARG PKG_PATH_INT=${APP_PATH_INT}/varchemist
+ARG PKG_PATH_INT=${APP_PATH_INT}/varmerger
 
 #WORKDIR usr/src/flask
 WORKDIR ${APP_PATH_INT}
-COPY varchemist ${PKG_PATH_INT}
+COPY varmerger ${PKG_PATH_INT}
 COPY requirements.txt ${PKG_PATH_INT}
 COPY setup.py ${PKG_PATH_INT}
 COPY ${APP_PATH_EXT} .

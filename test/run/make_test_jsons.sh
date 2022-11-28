@@ -1,11 +1,11 @@
 #!/bin/env bash
 
-pyscript=/mnt/c/Users/judson.x.belmont/Documents/Code/varchemist/test/run/vcf_to_json.py
-indir=/mnt/c/Users/judson.x.belmont/Documents/Code/varchemist/test/data/
-outdir=/mnt/c/Users/judson.x.belmont/Documents/Code/varchemist/test/data/
+pyscript=/mnt/c/Users/judson.x.belmont/Documents/Code/varmerger/test/run/vcf_to_json.py
+indir=/mnt/c/Users/judson.x.belmont/Documents/Code/varmerger/test/data/
+outdir=/mnt/c/Users/judson.x.belmont/Documents/Code/varmerger/test/data/
 genomicbuild=grch37 # Case-sensitive. Need to add aliases for 'GRCh37' support
 indents=4
-ntests=28
+ntests=32
 
 declare -A TEST # 1st dimension array. One per dataset.
 declare -A TESTS # 2nd dimension array. Each key is of format [integer_id_of_1st_d_array],[array_key_from_ast_d_array]
@@ -28,7 +28,7 @@ do
   #TEST["INFILE"]=$vcfinfile
   #TEST["OUTFILE"]=$vcfoutfile
   #TEST["ASSEMBLY"]=$genomicbuild
-  cmd="python3 $pyscript $vcfinfile $jsonoutfile --build $genomicbuild"
+  cmd="python3 $pyscript $vcfinfile $jsonoutfile --build $genomicbuild" # Build argument is no longer included in payload
   echo $cmd
   $cmd
 done
