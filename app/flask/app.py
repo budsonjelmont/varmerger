@@ -4,19 +4,14 @@ from flask import Flask, request
 #from flask_cors import CORS, cross_origin
 #from OpenSSL import SSL
 
-from yaml import safe_load
-
-import pandas as pd
-
-from varmerger import utils
 from varmerger import phasing
+
+from yaml import safe_load
 
 import logging
 from logging.config import dictConfig
 
-from werkzeug.exceptions import BadRequest, BadRequestKeyError
-
-### Function defs ### TODO move to another module 
+### Setup functions ### 
 
 def setup_logging(configfile):
   if configfile is None:
@@ -37,6 +32,7 @@ def setup_logging(configfile):
     logging.config.dictConfig(logconfig)
 
 def setup_phasing(configfile):
+  phasors = {}
   if configfile is None:
     pass
   else:
@@ -44,21 +40,7 @@ def setup_phasing(configfile):
       phaseconfig = safe_load(f)
       for k,v in phaseconfig['handlers'].items():
         phasors[k] = phasing.Phasing(v['url'],v['build'])
-
-def check_phasing_payload(payload):
-    reqdkeys = ['vcf']
-    if not all(key in payload for key in reqdkeys):
-      raise BadRequestKeyError('Invalid request.')
-    if 'mergedist' in payload:
-        try:
-          int(payload['mergedist'])
-        except ValueError as e:
-          raise BadRequest('Invalid request.')
-
-def check_prephasing_vcf(vcfdf):
-  # Check for NULL values in df, that all variants are on the same chromosome, and that more than one variant was passed in
-  if vcfdf.isnull().values.any() or len(vcfdf.chr.unique()) > 1 or vcfdf.shape[0] < 2:
-    raise BadRequest('Invalid request.')
+  return phasors
 
 # Initialize Flask properties from config file
 
@@ -67,67 +49,18 @@ methodspermitted=['POST','GET']
 
 phasors = {}
 
-app = Flask(__name__)
+def init_app(logconfigfile, phaseconfigfile):
+  """Initialize the application."""
+  app = Flask(__name__, instance_relative_config=False)
+  #app.config.from_object('config.Config')
 
-### Error handling ###
-@app.errorhandler(BadRequest)
-def handle_bad_request(e):
-    return 'Invalid request. Check the structure of the payload.', 400
+  with app.app_context():
+    setup_logging(logconfigfile)
+    from api.api import api
+    app.register_blueprint(api)
+    app.phasors = setup_phasing(phaseconfigfile)
+    return app
 
-@app.errorhandler(BadRequestKeyError)
-def handle_bad_requestkey(e):
-    return 'Invalid request. Check that all required keys are present in payload.', 400
-
-##############################################
-### Routes ###################################
-##############################################
-
-### Test route ###
-@app.route('/test', methods=methodspermitted)
-def test():
-    return 'I\'m listening.'
-
-### Run VarGrouper to produce merged VCF ###
-@app.route('/phase/<string:build>/merge_vcf', methods=methodspermitted)
-def merge_vcf(build):
-    if build.lower() in phasors.keys():
-      phasor = phasors[build.lower()]
-    else:
-        pass # return error
-    data = request.get_json(silent=False, force=False)
-    check_phasing_payload(data)
-    if 'mergedist' in data:
-      merge_distance = int(data['mergedist'])
-    else:
-      merge_distance = 999999
-    vcfdf = pd.DataFrame.from_dict(data['vcf'])
-    dtypes={'chr':'str','pos':'Int64','id':'str','ref':'str','alt':'str'}
-    try:
-      vcfdf = vcfdf.astype(dtypes)
-    except KeyError as e:
-      raise BadRequest('Invalid request.')
-    check_prephasing_vcf(vcfdf)
-    #print(vcfdf)
-    # Data checks
-    chr = vcfdf.chr.values[0]
-    vcfdf.sort_values(by=['chr','pos'],inplace=True)
-    # Convert pandas dataframe to list of VCF Records
-    vcf_records = utils.df_to_vcf(vcfdf)
-    #print(vcf_records)
-    mergedf = phasor.merge_phased_vars(vcf_records, merge_distance)
-    #print(mergedf)
-    # Add warning for merges in which 1 or more variants were skipped
-    mergedf['warn'] = mergedf['skipped'].apply(lambda x: 'These variants in the phase group could not be merged and were omitted: ' + ';'.join(x) if x  else None)
-    # Drop columns that won't be returned to client
-    mergedf.drop(columns=['skipped'], inplace=True, axis=1)
-    err = ''
-    return utils.package_df(mergedf, err), 200, {'ContentType':'application/json'} 
-
-##############################################
-##############################################
-##############################################
-
-#context=(cer,key)
 if __name__ == '__main__':
   
   parser = ap.ArgumentParser(description='')
@@ -143,4 +76,4 @@ if __name__ == '__main__':
   setup_phasing(phaseconfigfile)
 
   app.run(host='0.0.0.0')
-  #app.run(host='0.0.0.0',ssl_context=context)
+  #app.run(host='0.0.0.0',ssl_context=context) #TODO
