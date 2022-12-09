@@ -11,4 +11,5 @@ COPY varmerger ${PKG_PATH_INT}
 COPY requirements.txt ${PKG_PATH_INT}
 COPY setup.py ${PKG_PATH_INT}
 COPY ${APP_PATH_EXT} .
+#TODO don't run as root
 RUN pip install --no-cache-dir -r requirements.txt && python3 ${PKG_PATH_INT}/setup.py install && pip install --no-cache-dir -r ${PKG_PATH_INT}/requirements.txt

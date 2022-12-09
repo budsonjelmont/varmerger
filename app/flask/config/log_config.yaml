@@ -19,7 +19,7 @@ handlers:
   file:
           level: 'DEBUG'
           class: 'logging.FileHandler'
-          filename: '/home/belmjud/varchemist.log'
+          filename: '/home/belmjud/varmerger.log'
           formatter: 'default'
 root:
         level: 'INFO'

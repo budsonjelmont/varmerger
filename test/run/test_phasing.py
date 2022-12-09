@@ -7,7 +7,7 @@ class TestPhasing:
   testdir = '../data/'
   #baseurl = 'http://127.0.0.1:6666'
   baseurl = 'http://127.0.0.1:5000'
-  endpoint = '/phase/grch37/merge_vcf'
+  endpoint = '/phase/grch37/merge_vars'
   url = baseurl + endpoint
   headers = {'Content-type': 'application/json'} # don't strictly need to set explicitly, requests lib will do it for us
 

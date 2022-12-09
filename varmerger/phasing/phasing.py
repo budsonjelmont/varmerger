@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from celltics.tools import vargroup
 from celltics.datasource import datasource, seqrepo
-from varchemist import utils
+from varmerger import utils
 
 
 class Phasing:
