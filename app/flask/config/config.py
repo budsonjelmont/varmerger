@@ -1,70 +1,37 @@
-from os import path
+from os import path, getenv
 from dotenv import load_dotenv
+
+from yaml import safe_load
 
 basedir = path.abspath(path.dirname(__file__))
 load_dotenv(path.join(basedir, '.env'))
-
-default_phase_config = {
- 'handlers':
- {
-    'grch37':
-     {
-       'name': 'seqrepo_grch37',
-       'build': 'grch37',
-       'url': 'http://127.0.0.1:7777'
-     },
-    'grch38':
-    {
-      'name': 'seqrepo_grch38',
-      'build': 'grch38',
-      'url': 'http://127.0.0.1:7777'
-    }
-  }
-}
-
-default_logging_config = {
-  'version': 1,
-  'formatters':
-  {
-    'default':
-      {'format': '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'}
-  },
-  'handlers':
-  {
-    'console':
-    {
-	'level': 'INFO',
-	'class': 'logging.StreamHandler',
-	'stream': 'ext://sys.stdout',
-	'formatter': 'default'
-    },
-    'file':
-    {
-	'level': 'DEBUG',
-	'class': 'logging.FileHandler',
-	'filename': '/tmp/varmerger.log',
-	'formatter': 'default'
-    }
-  },
-  'root':{
-      'level': 'INFO',
-      'handlers':
-      {
-	 'console',
-	 'file'
-      }
-  }
-}
+    
+def read_yaml(yamlfile):
+  try:
+    with open(yamlfile) as f:
+      configdict = safe_load(f)
+    return configdict
+  except IOError:
+    print('ERROR: Could not read config file ' + yamlfile)
+    quit()
 
 class Config:
     
-    # Default settings
-    FLASK_ENV = 'development'
-    DEBUG = False
-    TESTING = False
-    # TODO check env var to determine if configs should be read from an external file instead
-    LOG_CONFIG = default_logging_config
-    PHASE_CONFIG = default_phase_config
+  # Default settings
+  FLASK_ENV = 'development'
+  DEBUG = False
+  TESTING = False
+  # If a path to a config .yaml was passed, read in config values from there 
+  LOG_CONFIG_YAML_PATH = getenv('LOG_CONFIG_YAML_PATH')
+  if LOG_CONFIG_YAML_PATH:
+    LOG_CONFIG_DICT = read_yaml(LOG_CONFIG_YAML_PATH)
+  else:
+     LOG_CONFIG_DICT = None
+  PHASE_CONFIG_YAML_PATH = getenv('PHASE_CONFIG_YAML_PATH')
+  if PHASE_CONFIG_YAML_PATH:
+     PHASE_CONFIG_DICT = read_yaml(PHASE_CONFIG_YAML_PATH)
+  else:
+     PHASE_CONFIG_DICT = None
 
 class DevelopmentConfig(Config):
     DEBUG = True
@@ -78,6 +45,8 @@ class ProductionConfig(Config):
 
 config = {
   'development': DevelopmentConfig,
+  'dev': DevelopmentConfig,
   'production': ProductionConfig,
-  'default': DevelopmentConfig,
+  'prod': ProductionConfig,
+  'default': DevelopmentConfig
 }
