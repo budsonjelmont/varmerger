@@ -4,7 +4,6 @@ from celltics.tools import vargroup
 from celltics.datasource import datasource, seqrepo
 from varmerger import utils
 
-
 class Phasing:
   def __init__(self, url, build):
     self.datasource = seqrepo.SeqRepo(url, build) # e.g. 'http://127.0.0.1:7777', 'grch37'
