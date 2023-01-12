@@ -32,6 +32,11 @@ class Config:
      PHASE_CONFIG_DICT = read_yaml(PHASE_CONFIG_YAML_PATH)
   else:
      PHASE_CONFIG_DICT = None
+  CORS_CONFIG_YAML_PATH = getenv('CORS_CONFIG_YAML_PATH')
+  if CORS_CONFIG_YAML_PATH:
+     CORS_CONFIG_DICT = read_yaml(CORS_CONFIG_YAML_PATH)
+  else:
+     CORS_CONFIG_DICT = None
 
 class DevelopmentConfig(Config):
     DEBUG = True

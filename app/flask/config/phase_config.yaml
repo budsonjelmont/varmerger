@@ -7,4 +7,4 @@ handlers:
   grch38:
     name: seqrepo_grch38
     build: grch38        
-    url: http://127.0.0.1:7777     
+    url: http://127.0.0.1:7777

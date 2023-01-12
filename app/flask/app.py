@@ -12,9 +12,6 @@ import logging
 
 # Initialize Flask properties from config file
 
-originspermitted=['localhost:80','127.0.0.1:80','0.0.0.0:80','localhost:6666','127.0.0.1:6666','0.0.0.0:6666']
-methodspermitted=['POST','GET']
-
 def create_app(configname='default'):
   app = Flask(__name__, instance_relative_config=False)
   app.config.from_object(config[configname])
