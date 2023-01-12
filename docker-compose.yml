@@ -1,8 +1,8 @@
-version: '1.0.0'
+version: '3.0'
 
 services:
   flask:
-    container_name: varmerger_flask
+    container_name: varmerger_rest-service
     restart: always
     build: 
         context: .
@@ -11,8 +11,10 @@ services:
                 progress: string
     ports:
       - "6666:6666"
-    command: "tail -f /dev/null"
-    #command: gunicorn -w 1 -b 0.0.0.0:6666 wsgi:server
+        #command: "tail -f /dev/null"
+    command: gunicorn -w 1 -b 0.0.0.0:6666 wsgi:app
+    depends_on:
+      - seqrepo_api
   
   nginx:
     container_name: varmerger_nginx
@@ -23,4 +25,11 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - varmerger_flask
+      - flask
+
+  seqrepo_api:
+    container_name: seqrepo_rest-service
+    image: biocommons/seqrepo-rest-service
+    restart: always
+    ports:
+      - "7777:5000"
