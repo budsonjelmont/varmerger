@@ -1,5 +1,5 @@
 from flask import Flask, Blueprint, request, current_app
-#from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 #from OpenSSL import SSL
 
 from . import validate
@@ -22,6 +22,10 @@ methodspermitted=['POST','GET']
 api = Blueprint(
     'api', __name__
 )
+
+### CORS setup
+cors = CORS(current_app, resources=current_app.config['CORS_CONFIG_DICT'])
+
 ### Error handling ###
 @api.errorhandler(BadRequest)
 def handle_bad_request(e):

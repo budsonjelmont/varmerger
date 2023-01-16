@@ -6,10 +6,9 @@ class LogSetup():
       self.init_app(app, **kwargs)
 
   def init_app(self, app):
-    # Check if yaml config was passed, and if it was use that
+    # Check if app config has a log dictionary config defined and use that if it does
     if app.config['LOG_CONFIG_DICT']:
-      log_config = app.config['LOG_CONFIG_DICT']
-      dictConfig(log_config)
+      dictConfig(app.config['LOG_CONFIG_DICT'])
     else:
       logging.basicConfig(
         level=logging.DEBUG,

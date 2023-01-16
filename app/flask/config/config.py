@@ -18,15 +18,39 @@ def read_yaml(yamlfile):
 class Config:
     
   # Default settings
-  FLASK_ENV = 'development'
+  ENV = 'development'
   DEBUG = False
   TESTING = False
+  default_log_config_dict = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+	'standard': {
+	    'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+	},
+    },
+    'handlers': {
+	'default': {
+	    'level': 'INFO',
+	    'formatter': 'standard',
+	    'class': 'logging.StreamHandler',
+	}
+    },
+    'loggers': {
+	'': {
+	    'handlers': ['default'],
+	    'level': 'INFO',
+	    'propagate': True
+	},
+    }
+  }
+  default_cors_config_dict = {'/phase/*':{'origins':['*']}}
   # If a path to a config .yaml was passed, read in config values from there 
   LOG_CONFIG_YAML_PATH = getenv('LOG_CONFIG_YAML_PATH')
   if LOG_CONFIG_YAML_PATH:
     LOG_CONFIG_DICT = read_yaml(LOG_CONFIG_YAML_PATH)
   else:
-     LOG_CONFIG_DICT = None
+     LOG_CONFIG_DICT = default_log_config_dict
   PHASE_CONFIG_YAML_PATH = getenv('PHASE_CONFIG_YAML_PATH')
   if PHASE_CONFIG_YAML_PATH:
      PHASE_CONFIG_DICT = read_yaml(PHASE_CONFIG_YAML_PATH)
@@ -36,17 +60,19 @@ class Config:
   if CORS_CONFIG_YAML_PATH:
      CORS_CONFIG_DICT = read_yaml(CORS_CONFIG_YAML_PATH)
   else:
-     CORS_CONFIG_DICT = None
+     CORS_CONFIG_DICT = default_cors_config_dict
 
 class DevelopmentConfig(Config):
-    DEBUG = True
+  
+  DEBUG = True
 
 class TestingConfig(Config):
-    TESTING = True
+    
+  TESTING = True
 
 class ProductionConfig(Config):
-    FLASK_ENV = 'production'
-
+     
+  ENV = 'production'
 
 config = {
   'development': DevelopmentConfig,
