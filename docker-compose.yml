@@ -1,4 +1,4 @@
-version: '3.0'
+version: '3.3'
 
 services:
   flask:
@@ -15,6 +15,10 @@ services:
     command: gunicorn -w 1 -b 0.0.0.0:6666 wsgi:app
     depends_on:
       - seqrepo_api
+    volumes:
+      - type: bind
+        source: /mnt/c/Users/judson.x.belmont/Documents/Code/varmerger/app/flask/config
+        target: /config
   
   nginx:
     container_name: varmerger_nginx

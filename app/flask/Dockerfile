@@ -2,7 +2,7 @@
 FROM python:3.8.5
 
 ARG APP_PATH_EXT=/app/flask
-ARG APP_PATH_INT=/usr/src/flask
+ARG APP_PATH_INT=/
 ARG PKG_PATH_INT=${APP_PATH_INT}/varmerger
 
 #WORKDIR usr/src/flask
