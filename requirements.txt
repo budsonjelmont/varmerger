@@ -1,7 +1,7 @@
 astroid==2.6.6
 attrs==21.4.0
 biopython==1.79
--e git+https://github.com/budsonjelmont/CellTics.git@0fc91d502f3a7fa1244e32c19732bf88e6e65d68#egg=celltics
+-e git+https://github.com/budsonjelmont/CellTics.git@b54e3d4238d448c0cdfdcce32945a8cf1c6aa375#egg=celltics
 certifi==2021.10.8
 charset-normalizer==2.0.12
 click==8.0.3
@@ -33,14 +33,14 @@ pytest==7.0.1
 python-dateutil==2.8.2
 python-dotenv==0.19.2
 pytz==2021.3
-PyVCF==0.6.8
+pyvcf3==1.0.3
 PyYAML==6.0
 requests==2.27.1
 six==1.16.0
 toml==0.10.2
 tomli==2.0.1
 urllib3==1.26.8
-#-e git+https://git01.ops.medplus.com/Judson.X.Belmont/varmerger@140c7ee9bb6ad2197980cea7c5747e6e3fbb1c08#egg=varmerger
+-e git+https://github.com/budsonjelmont/varmerger.git@a6e4c77981f1ecb19082571a08c86c4651779546#egg=varmerger
 Werkzeug==2.0.3
 wrapt==1.12.1
 xmltodict==0.12.0

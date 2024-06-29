@@ -45,8 +45,8 @@ def test():
     return 'I\'m listening.'
 
 ### Run VarGrouper to produce merged VCF ###
-@api.route('/phase/<string:build>/merge_vars', methods=methodspermitted)
-def merge_vars(build):
+@api.route('/phase/<string:build>/merge', methods=methodspermitted)
+def merge(build):
     if build.lower() in current_app.phasors.keys():
       phasor = current_app.phasors[build.lower()]
     else:
