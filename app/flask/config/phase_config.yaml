@@ -1,10 +1,12 @@
 ---
 handlers:
   grch37:
+    type: seqrepo
     name: seqrepo_grch37
     build: grch37
     url: http://127.0.0.1:7777
   grch38:
+    type: seqrepo
     name: seqrepo_grch38
     build: grch38        
     url: http://127.0.0.1:7777

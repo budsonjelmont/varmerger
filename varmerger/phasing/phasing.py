@@ -1,12 +1,13 @@
 import numpy as np
 import pandas as pd
 from celltics.tools import vargroup
-from celltics.datasource import datasource, seqrepo
+from celltics.tools.datasource import SeqRepo
 from varmerger import utils
 
 class Phasing:
-  def __init__(self, url, build):
-    self.datasource = seqrepo.SeqRepo(url, build) # e.g. 'http://127.0.0.1:7777', 'grch37'
+  def __init__(self, url, build): #, datasource): # TODO dependency injection
+    # self.datasource = datasource # TODO injected dependency
+    self.datasource = SeqRepo(url, build) # e.g. 'http://127.0.0.1:7777', 'grch37'
 
   def merge_phased_vars(self, vcf, merge_distance=500):
     vars_skipped, vars_to_group = vargroup.parse_vcf(vcf, merge_distance, None)

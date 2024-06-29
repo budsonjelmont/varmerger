@@ -17,7 +17,7 @@ services:
       - seqrepo_api
     volumes:
       - type: bind
-        source: /mnt/c/Users/judson.x.belmont/Documents/Code/varmerger/app/flask/config
+        source: /mnt/c/Users/judson.x.belmont/repos/varmerger/app/flask/config
         target: /config
   
   nginx:
@@ -31,9 +31,21 @@ services:
     depends_on:
       - flask
 
+  # TODO
+  # seqrepo:
+  #   container_name: seqrepo
+  #   image: biocommons/seqrepo
+  #   restart: always
+  #   ports:
+  #     - "7777:5000"
+
   seqrepo_api:
     container_name: seqrepo_rest-service
     image: biocommons/seqrepo-rest-service
     restart: always
     ports:
       - "7777:5000"
+    volumes:
+      - type: bind
+        source: /usr/local/share/seqrepo/2024-02-20
+        target: /mnt/seqrepo
