@@ -21,7 +21,7 @@ class Config:
   ENV = 'development'
   DEBUG = False
   TESTING = False
-  default_log_config_dict = {
+  DEFAULT_LOG_CONFIG_DICT = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
@@ -44,13 +44,13 @@ class Config:
 	},
     }
   }
-  default_cors_config_dict = {'/phase/*':{'origins':['*']}}
+  DEFAULT_CORS_CONFIG_DICT = {'/phase/*':{'origins':['*']}}
   # If a path to a config .yaml was passed, read in config values from there 
   LOG_CONFIG_YAML_PATH = getenv('LOG_CONFIG_YAML_PATH')
   if LOG_CONFIG_YAML_PATH:
     LOG_CONFIG_DICT = read_yaml(LOG_CONFIG_YAML_PATH)
   else:
-     LOG_CONFIG_DICT = default_log_config_dict
+     LOG_CONFIG_DICT = DEFAULT_LOG_CONFIG_DICT
   PHASE_CONFIG_YAML_PATH = getenv('PHASE_CONFIG_YAML_PATH')
   if PHASE_CONFIG_YAML_PATH:
      PHASE_CONFIG_DICT = read_yaml(PHASE_CONFIG_YAML_PATH)
@@ -60,7 +60,7 @@ class Config:
   if CORS_CONFIG_YAML_PATH:
      CORS_CONFIG_DICT = read_yaml(CORS_CONFIG_YAML_PATH)
   else:
-     CORS_CONFIG_DICT = default_cors_config_dict
+     CORS_CONFIG_DICT = DEFAULT_CORS_CONFIG_DICT
 
 class DevelopmentConfig(Config):
   

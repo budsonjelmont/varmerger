@@ -1,7 +1,8 @@
 import numpy as np
 import pandas as pd
 from celltics.tools import vargroup
-from celltics.tools.datasource import SeqRepo
+# from celltics.tools.datasource import SeqRepo # Structure of imports in CellTics "master" branch
+from celltics.datasource.seqrepo import SeqRepo # Structure of imports in CellTics "dev" branch
 from varmerger import utils
 
 class Phasing:
