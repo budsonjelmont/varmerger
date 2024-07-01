@@ -4,11 +4,6 @@ def check_phasing_payload(payload):
     reqdkeys = ['vcf']
     if not all(key in payload for key in reqdkeys):
       raise BadRequestKeyError
-    if 'mergedist' in payload:
-        try:
-          int(payload['mergedist'])
-        except ValueError as e:
-          raise BadRequest
 
 def check_prephasing_vcf(vcfdf):
   # Check for NULL values in df, that all variants are on the same chromosome, and that more than one variant was passed in
