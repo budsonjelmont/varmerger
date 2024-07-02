@@ -1,6 +1,9 @@
 from logging.config import dictConfig
 
 class LogSetup():
+
+  __name__ = 'logger'
+
   def __init__(self, app=None, **kwargs):
     if app is not None:
       self.init_app(app, **kwargs)

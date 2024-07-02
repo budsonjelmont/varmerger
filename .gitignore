@@ -1,3 +1,4 @@
 depr/
 scratch/
 .venv/
+test/data/*json

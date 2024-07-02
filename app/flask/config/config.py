@@ -11,7 +11,8 @@ def read_yaml(yamlfile):
     with open(yamlfile) as f:
       configdict = safe_load(f)
     return configdict
-  except IOError:
+  except IOError as e:
+    # TODO: log error
     print('ERROR: Could not read config file ' + yamlfile)
     quit()
 

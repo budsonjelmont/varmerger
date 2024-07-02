@@ -19,7 +19,11 @@ def create_app(configname='default'):
     from api.api import api
     app.register_blueprint(api)
     for extension in extensions:
-      extension.init_app(app)
+      try:
+        extension.init_app(app)
+      except Exception as e:
+        logging.error(f'Failed to initialize extension: {extension.__name__}')
+        logging.error(e)
     return app
 
 if __name__ == '__main__':

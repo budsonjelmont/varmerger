@@ -1,4 +1,4 @@
-from os import path, getenv
+from os import getenv
 from app import create_app 
 
 configname = getenv('VARMERGER_CONFIGNAME') or 'default'

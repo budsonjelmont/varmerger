@@ -8,11 +8,11 @@ The application is configured through a combination of external configuration fi
 
 ## Using the flask built-in dev server
 
-		python3 app.py ${config name, one of "dev","prod","development","production", or "default"}
+	python3 app.py ${config name, one of "dev","prod","development","production", or "default"}
 
 ## Gunicorn
 
-		python3 wsgi.py ${config name, one of "dev","prod","development","production", or "default"}
+	VARMERGER_CONFIGNAME=${config name, one of "dev","prod","development","production", or "default"} gunicorn --bind 0.0.0.0:5000 wsgi:app
 
 ## Behind nginx in container
 
