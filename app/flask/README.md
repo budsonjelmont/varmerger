@@ -10,7 +10,7 @@ Service for merging multiple variants in VCF format into a single VCF record
 
 or equivalently:
 
-    VARMERGER_CONFIGNAME=${config name, one of "dev","prod","development","production", or "default"} py wsgi.py
+    VARMERGER_CONFIGNAME=${config name, one of "dev","prod","development","production", or "default"} python3 wsgi.py
 
 ## Behind Gunicorn
 

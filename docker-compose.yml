@@ -1,12 +1,11 @@
-version: '3.3'
-
 services:
   flask:
-    container_name: varmerger_rest-service
+    container_name: varmerger_service
     restart: always
     build: 
         context: .
         dockerfile: ./app/flask/Dockerfile
+        network: host
         args:
                 progress: string
     ports:
@@ -18,18 +17,18 @@ services:
     volumes:
       - type: bind
         source: /mnt/c/Users/judson.x.belmont/repos/varmerger/app/flask/config
-        target: /config
+        target: /app/config
   
-  nginx:
-    container_name: varmerger_nginx
-    restart: always
-    build:
-        context: .
-        dockerfile: ./app/nginx/Dockerfile
-    ports:
-      - "80:80"
-    depends_on:
-      - flask
+  # nginx:
+  #   container_name: varmerger_nginx
+  #   restart: always
+  #   build:
+  #       context: .
+  #       dockerfile: ./app/nginx/Dockerfile
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - flask
 
   # TODO
   # seqrepo:
@@ -40,12 +39,13 @@ services:
   #     - "7777:5000"
 
   seqrepo_api:
-    container_name: seqrepo_rest-service
+    container_name: seqrepo_rest_service
     image: biocommons/seqrepo-rest-service
     restart: always
     ports:
-      - "7777:5000"
+      - "5000:5000"
     volumes:
       - type: bind
         source: /usr/local/share/seqrepo/2024-02-20
         target: /mnt/seqrepo
+    command: ["seqrepo-rest-service","/mnt/seqrepo","-w"]
